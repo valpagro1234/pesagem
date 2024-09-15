@@ -1,0 +1,1109 @@
+<html><head><title>Registro de Pesagem de Gado - Fazenda Nova Era</title><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            max-width: 600px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 0;
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 0.8em;
+            color: #666;
+            margin-top: 5px;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin: 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .form-group input[readonly] {
+            background-color: #e9ecef;
+            color: #6c757d;
+        }
+        .btn-container {
+            display: flex;
+            justify-content: space-between;
+        }
+        .btn {
+            padding: 10px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            flex: 1;
+            margin: 0 5px;
+            text-align: center;
+        }
+        .btn:hover {
+            background-color: #218838;
+        }
+        .btn-danger {
+            background-color: #dc3545;
+        }
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+        .btn-export {
+            background-color: #007bff;
+        }
+        .btn-export:hover {
+            background-color: #0056b3;
+        }
+        .btn-sm {
+            padding: 2px 5px;
+            background-color: #dc3545;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .btn-sm:hover {
+            background-color: #c82333;
+        }
+        .btn-print {
+            background-color: #17a2b8;
+        }
+        .btn-print:hover {
+            background-color: #138496;
+        }
+        .list {
+            margin-top: 20px;
+        }
+        #list table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        #list th, #list td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        #list th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        #list tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        #list .btn-sm {
+            padding: 2px 5px;
+            margin: 0 2px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        #list .btn-edit {
+            background-color: #ffc107;
+            color: #000;
+        }
+        #list .btn-delete {
+            background-color: #dc3545;
+            color: #fff;
+        }
+        #list .btn-edit:hover {
+            background-color: #e0a800;
+        }
+        #list .btn-delete:hover {
+            background-color: #c82333;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 400px;
+            position: relative;
+        }
+        .modal-content h2 {
+            margin-top: 0;
+        }
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.5em;
+            cursor: pointer;
+            color: #333;
+        }
+        .message-red {
+            color: #dc3545;
+        }
+        .message-yellow {
+            color: #ffc107;
+        }
+        .message-green {
+            color: #28a745;
+        }
+        .message-blue {
+            color: #007bff;
+        }
+        .message-error {
+            color: #dc3545;
+        }
+        .btn-container button {
+            flex: 1;
+            margin: 0 5px;
+        }
+        .edit-input {
+            background-color: #fff;
+            color: #000;
+        }
+        .edit-input[readonly] {
+            background-color: #e9ecef;
+            color: #6c757d;
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            left: 50%;
+            top: 20%;
+            transform: translateX(-50%);
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 1000;
+            text-align: center;
+        }
+        .popup button {
+            margin-top: 10px;
+            padding: 5px 15px;
+        }
+        .popup button:focus {
+            outline: 2px solid #007bff;
+            box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+        }
+        .horizontal-group {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        .horizontal-group > div {
+            flex: 1;
+            margin-right: 5px;
+        }
+        .horizontal-group > div:last-child {
+            margin-right: 0;
+        }
+        .horizontal-group input {
+            width: 100%;
+            font-size: 0.9em;
+        }
+        #apartadosList table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        #apartadosList th, #apartadosList td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        #apartadosList th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        #apartadosList tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        #apartadosList .btn-sm {
+            padding: 2px 5px;
+            background-color: #dc3545;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        #apartadosList .btn-sm:hover {
+            background-color: #c82333;
+        }
+        input[type="date"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin: 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        #rebanhoList table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        #rebanhoList th, #rebanhoList td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        #rebanhoList th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        #rebanhoList tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        #rebanhoList .btn-sm {
+            padding: 2px 5px;
+            background-color: #dc3545;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        #rebanhoList .btn-sm:hover {
+            background-color: #c82333;
+        }
+        .menu {
+            background-color: #333;
+            overflow: hidden;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .menu-container {
+            display: inline-block;
+        }
+        .menu a {
+            float: left;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 17px;
+        }
+        .menu a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+        .menu a.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+        #rebanhoPagination {
+            margin-top: 20px;
+            text-align: center;
+        }
+        #rebanhoPagination button {
+            margin: 0 10px;
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        #rebanhoPagination button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        #pageInfo {
+            margin: 0 10px;
+        }
+        #prontoList table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        #prontoList th, #prontoList td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        #prontoList th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        #prontoList tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        #prontoList .btn-sm {
+            padding: 2px 5px;
+            background-color: #dc3545;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        #prontoList .btn-sm:hover {
+            background-color: #c82333;
+        }
+        .save-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+            z-index: 1000;
+        }
+        .save-popup h3 {
+            margin-top: 0;
+        }
+        .save-popup button {
+            margin-top: 10px;
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .save-popup button:hover {
+            background-color: #0056b3;
+        }
+    </style></head>
+<body>
+    <div class="menu">
+        <div class="menu-container">
+            <a href="#" onclick="showMainPage()">Principal</a>
+            <a href="#" onclick="showRebanhoPage()">Rebanho</a>
+            <a href="#" onclick="showApartadosPage()">Apartados</a>
+            <a href="#" onclick="showProntoPage()">Pronto</a>
+            <a href="#" onclick="exportData()">Exportar Dados</a>
+        </div>
+    </div>
+    <div class="container">
+        <h1>Registro de Pesagem de Gado</h1>
+        <div class="subtitle">Desenvolvido por Fazenda Nova Era</div>
+        <div class="form-group">
+            <label for="date">Data da Pesagem:</label>
+            <input type="date" id="date" required>
+        </div>
+        <div class="form-group horizontal-group">
+            <div>
+                <label for="initial-weight-date">Data Peso Inicial:</label>
+                <input type="text" id="initial-weight-date" readonly disabled>
+            </div>
+            <div>
+                <label for="last-weight">Ult.Pesagem:</label>
+                <input type="text" id="last-weight" readonly disabled>
+            </div>
+            <div>
+                <label for="current-weight">Peso Atual:</label>
+                <input type="text" id="current-weight" readonly disabled>
+            </div>
+            <div>
+                <label for="projection">Projecao:</label>
+                <input type="text" id="projection" readonly disabled>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="ear-tag">Brinco:</label>
+            <input type="number" id="ear-tag" required onkeydown="updateFields(event)">
+        </div>
+        <div class="form-group">
+            <label for="weight">Peso do Animal (kg):</label>
+            <input type="number" id="weight" step="0.1" required onblur="document.getElementById('save-btn').focus()" disabled>
+        </div>
+        <div id="popup" class="popup">
+            <p id="popup-message"></p>
+            <button onclick="closePopup()" class="btn">OK</button>
+        </div>
+        <div class="btn-container">
+            <button class="btn" id="save-btn" onclick="saveData()">Salvar</button>
+            <button class="btn btn-danger" onclick="clearAllRecords()">Apagar Todos</button>
+        </div>
+        <div id="list" class="list">
+            <h2>Registros de Pesagem</h2>
+            <table>
+                <tr>
+                    <th>Data</th>
+                    <th>Brinco</th>
+                    <th>Peso</th>
+                    <th>GMD Anterior</th>
+                    <th>GMD Geral</th>
+                    <th>AÃ§Ãµes</th>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal para edicao de dados -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Editar Dados</h2>
+            <div class="form-group">
+                <label for="edit-ear-tag">Brinco:</label>
+                <input type="text" id="edit-ear-tag" class="edit-input">
+            </div>
+            <div class="form-group">
+                <label for="edit-weight">Peso:</label>
+                <input type="text" id="edit-weight" class="edit-input">
+            </div>
+            <div class="btn-container">
+                <button class="btn" onclick="saveEdit()">Salvar Alteracoes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PÃ¡ginas do Rebanho -->
+    <div id="rebanhoPage" style="display: none; padding: 20px;">
+        <h1>Rebanho</h1>
+        <div class="form-group">
+            <label for="fileInput">Importar Arquivo:</label>
+            <input type="file" id="fileInput">
+        </div>
+        <button class="btn" onclick="importFile()">Importar</button>
+        <button class="btn btn-danger" onclick="clearImportedData()">Limpar Dados Importados</button>
+        <button class="btn btn-info" onclick="showSearchInfoPopup()">Como funciona a busca</button>
+        <button class="btn btn-info" onclick="showMainPage()">Voltar</button>
+        <div id="rebanhoList"></div>
+        <div id="rebanhoPagination">
+            <button id="prevPage">Previous</button>
+            <span id="pageInfo"></span>
+            <button id="nextPage">Next</button>
+        </div>
+    </div>
+
+    <!-- PÃ¡ginas do Apartados -->
+    <div id="apartadosPage" style="display: none; padding: 20px;">
+        <h1>Apartados</h1>
+        <h2>Registros de Apartados por Perda de Peso</h2>
+        <button class="btn btn-info" onclick="showMainPage()">Voltar</button>
+        <button class="btn btn-print" onclick="printApartados()">Imprimir</button>
+        <button class="btn btn-danger" onclick="clearAllApartados()">Apagar Todos</button>
+        <div id="apartadosList"></div>
+    </div>
+
+    <!-- PÃ¡ginas do Pronto -->
+    <div id="prontoPage" style="display: none; padding: 20px;">
+        <h1>Pronto</h1>
+        <h2>Registros de Animais Prontos para Venda</h2>
+        <button class="btn btn-info" onclick="showMainPage()">Voltar</button>
+        <button class="btn btn-print" onclick="printPronto()">Imprimir</button>
+        <button class="btn btn-danger" onclick="clearAllPronto()">Apagar Todos</button>
+        <div id="prontoList"></div>
+    </div>
+
+    <div id="searchInfoPopup" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeSearchInfoPopup()">&times;</span>
+            <h2>Como funciona a busca na aba Rebanho</h2>
+            <p>A busca na aba Rebanho Ã© realizada da seguinte forma:</p>
+            <ol>
+                <li>Os dados do rebanho sÃ£o armazenados no localStorage com a chave 'rebanho'.</li>
+                <li>Quando vocÃª digita um nÃºmero de brinco no campo "Brinco", o sistema busca por esse nÃºmero exato na lista de animais do rebanho.</li>
+                <li>A busca Ã© feita usando o mÃ©todo find() em um array de objetos JavaScript.</li>
+                <li>Se um animal com o nÃºmero de brinco correspondente for encontrado, suas informaÃ§Ãµes sÃ£o exibidas nos campos apropriados.</li>
+                <li>Se nenhum animal for encontrado, uma mensagem de alerta Ã© exibida.</li>
+            </ol>
+            <p>Esta busca Ã© realizada em tempo real, Ã  medida que vocÃª digita o nÃºmero do brinco.</p>
+        </div>
+    </div>
+
+    <script>
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const day = date.getDate().toString().padStart(2, '0');
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const year = date.getFullYear();
+            return `${day}/${month}/${year}`;
+        }
+
+        let currentPage = 1;
+        const rowsPerPage = 15;
+
+        function safeGet(obj, key, defaultValue = '') {
+            return obj && obj[key] !== undefined ? obj[key] : defaultValue;
+        }
+
+        function setActiveMenuItem(menuItem) {
+            const menuItems = document.querySelectorAll('.menu a');
+            menuItems.forEach(item => {
+                if (item.textContent === menuItem) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        }
+
+        function showMainPage() {
+            document.querySelector('.container').style.display = 'block';
+            document.getElementById('rebanhoPage').style.display = 'none';
+            document.getElementById('apartadosPage').style.display = 'none';
+            document.getElementById('prontoPage').style.display = 'none';
+            setActiveMenuItem('Principal');
+            displayRecords();
+        }
+
+        function showRebanhoPage() {
+            document.querySelector('.container').style.display = 'none';
+            document.getElementById('rebanhoPage').style.display = 'block';
+            document.getElementById('apartadosPage').style.display = 'none';
+            document.getElementById('prontoPage').style.display = 'none';
+            currentPage = 1;  
+            displayRebanhoRecords();
+            setActiveMenuItem('Rebanho');
+        }
+
+        function showApartadosPage() {
+            document.querySelector('.container').style.display = 'none';
+            document.getElementById('rebanhoPage').style.display = 'none';
+            document.getElementById('apartadosPage').style.display = 'block';
+            document.getElementById('prontoPage').style.display = 'none';
+            displayApartadosRecords();
+            setActiveMenuItem('Apartados');
+        }
+
+        function showProntoPage() {
+            document.querySelector('.container').style.display = 'none';
+            document.getElementById('rebanhoPage').style.display = 'none';
+            document.getElementById('apartadosPage').style.display = 'none';
+            document.getElementById('prontoPage').style.display = 'block';
+            displayProntoRecords();
+            setActiveMenuItem('Pronto');
+        }
+
+        function setTodayDate() {
+            const today = new Date();
+            const formattedDate = today.toISOString().split('T')[0];
+            document.getElementById('date').value = formattedDate;
+        }
+
+        function saveData() {
+            const selectedDate = new Date(document.getElementById('date').value);
+            const formattedDate = selectedDate.toISOString().split('T')[0];
+            const earTag = document.getElementById('ear-tag').value;
+            const weight = parseFloat(document.getElementById('weight').value);
+            
+            if (!formattedDate || !earTag || !weight) {
+                alert('Por favor, preencha todos os campos obrigatÃ³rios.');
+                return;
+            }
+
+            const rebanhoData = JSON.parse(localStorage.getItem('rebanho')) || [];
+            const animalRebanho = rebanhoData.find(item => item.earTag === earTag);
+
+            if (animalRebanho) {
+                const lastWeightDate = new Date(animalRebanho.currentWeightDate);
+                const firstWeightDate = new Date(animalRebanho.initialWeightDate);
+                const daysDifference = Math.round((selectedDate - firstWeightDate) / (1000 * 60 * 60 * 24));
+
+                const gmdGeral = daysDifference > 0 ? ((weight - animalRebanho.initialWeight) / daysDifference).toFixed(2) : 0;
+
+                const newRecord = { 
+                    date: formattedDate, 
+                    earTag, 
+                    weight, 
+                    gmdAnterior: animalRebanho.gmdGeral || '-',
+                    gmdGeral
+                };
+                const records = JSON.parse(localStorage.getItem('pesagem')) || [];
+                records.push(newRecord);
+                localStorage.setItem('pesagem', JSON.stringify(records));
+
+                if (weight < animalRebanho.currentWeight) {
+                    const apartadosRecord = { 
+                        earTag, 
+                        dataPesagem: formattedDate, 
+                        pesoAtual: animalRebanho.currentWeight, 
+                        pesoNovo: weight 
+                    };
+                    const apartados = JSON.parse(localStorage.getItem('apartados')) || [];
+                    apartados.push(apartadosRecord);
+                    localStorage.setItem('apartados', JSON.stringify(apartados));
+                }
+
+                // Check if the cattle is ready for sale
+                if (daysDifference >= 90 && weight >= 480) {
+                    const prontoRecord = {
+                        earTag,
+                        dataPesagem: formattedDate,
+                        peso: weight,
+                        tempo: daysDifference
+                    };
+                    const prontos = JSON.parse(localStorage.getItem('prontos')) || [];
+                    prontos.push(prontoRecord);
+                    localStorage.setItem('prontos', JSON.stringify(prontos));
+                    
+                    showPopup('Gado Pronto!', 'message-green');
+                } else {
+                    showPopup();
+                }
+            } else {
+                alert('Animal nÃ£o encontrado no rebanho.');
+                return;
+            }
+
+            // Clear input fields and update display
+            document.getElementById('ear-tag').value = '';
+            document.getElementById('weight').value = '';
+            document.getElementById('current-weight').value = '';
+            document.getElementById('projection').value = '';
+            document.getElementById('initial-weight-date').value = '';
+            document.getElementById('last-weight').value = '';
+
+            displayRecords();
+        }
+
+        function showPopup(customMessage, customClass) {
+            const popup = document.getElementById('popup');
+            const popupMessage = document.getElementById('popup-message');
+
+            let message = customMessage || '';
+            let className = customClass || '';
+
+            if (!customMessage) {
+                const weight = parseFloat(document.getElementById('weight').value);
+                const currentWeight = parseFloat(document.getElementById('current-weight').value);
+                const projection = parseFloat(document.getElementById('projection').value);
+
+                if (weight < currentWeight) {
+                    message = 'Atencao!! O gado perdeu peso. Separe para venda';
+                    className = 'message-red';
+                } else if (weight === projection) {
+                    message = 'Ganho dentro do esperado';
+                    className = 'message-blue';
+                } else if (weight > projection) {
+                    message = 'Ganho acima do esperado';
+                    className = 'message-green';
+                }
+            }
+
+            if (message) {
+                popupMessage.textContent = message;
+                popup.className = `popup ${className}`;
+                popup.style.display = 'block';
+                
+                setTimeout(() => {
+                    popup.querySelector('button').focus();
+                }, 0);
+            }
+        }
+
+        function closePopup() {
+            document.getElementById('popup').style.display = 'none';
+            document.getElementById('ear-tag').focus();
+        }
+
+        function displayRecords() {
+            const list = document.getElementById('list');
+            const records = JSON.parse(localStorage.getItem('pesagem')) || [];
+            const table = list.querySelector('table');
+            table.innerHTML = `
+                <tr>
+                    <th>Data</th>
+                    <th>Brinco</th>
+                    <th>Peso</th>
+                    <th>GMD Anterior</th>
+                    <th>GMD Geral</th>
+                    <th>AÃ§Ãµes</th>
+                </tr>
+            `;
+
+            records.forEach((record, index) => {
+                const formattedDate = new Date(record.date).toLocaleDateString('pt-BR');
+                const row = table.insertRow();
+                row.innerHTML = `
+                    <td>${formattedDate}</td>
+                    <td>${record.earTag}</td>
+                    <td>${record.weight} kg</td>
+                    <td>${record.gmdAnterior || '-'} kg/dia</td>
+                    <td>${record.gmdGeral || '-'} kg/dia</td>
+                    <td>
+                        <button class="btn-sm btn-edit" onclick="openEditModal(${index})">Editar</button>
+                        <button class="btn-sm btn-delete" onclick="deleteRecord(${index})">Excluir</button>
+                    </td>
+                `;
+            });
+        }
+
+        function openEditModal(index) {
+            const records = JSON.parse(localStorage.getItem('pesagem')) || [];
+            const record = records[index];
+
+            document.getElementById('edit-ear-tag').value = record.earTag;
+            document.getElementById('edit-weight').value = record.weight;
+            document.getElementById('editModal').style.display = 'flex';
+            document.getElementById('editModal').setAttribute('data-index', index);
+        }
+
+        function closeModal() {
+            document.getElementById('editModal').style.display = 'none';
+        }
+
+        function saveEdit() {
+            const index = document.getElementById('editModal').getAttribute('data-index');
+            const newEarTag = document.getElementById('edit-ear-tag').value;
+            const newWeight = parseFloat(document.getElementById('edit-weight').value);
+            const records = JSON.parse(localStorage.getItem('pesagem')) || [];
+            const currentDate = new Date().toISOString().split('T')[0];
+
+            const currentWeight = getCurrentWeightFromRebanho(newEarTag);
+
+            if (currentWeight !== null && newWeight < currentWeight) {
+                const apartadosRecord = { 
+                    earTag: newEarTag, 
+                    dataPesagem: currentDate, 
+                    pesoAtual: currentWeight, 
+                    pesoNovo: newWeight 
+                };
+                const apartados = JSON.parse(localStorage.getItem('apartados')) || [];
+                apartados.push(apartadosRecord);
+                localStorage.setItem('apartados', JSON.stringify(apartados));
+            }
+
+            records[index].earTag = newEarTag;
+            records[index].weight = newWeight;
+            localStorage.setItem('pesagem', JSON.stringify(records));
+
+            closeModal();
+            displayRecords();
+        }
+
+        function getCurrentWeightFromRebanho(earTag) {
+            const rebanho = JSON.parse(localStorage.getItem('rebanho')) || [];
+            const record = rebanho.find(item => item.earTag === earTag);
+            return record ? parseFloat(record.currentWeight) : null;
+        }
+
+        function deleteRecord(index) {
+            if (confirm('Tem certeza de que deseja excluir este registro?')) {
+                const records = JSON.parse(localStorage.getItem('pesagem')) || [];
+                records.splice(index, 1);
+                localStorage.setItem('pesagem', JSON.stringify(records));
+                displayRecords();
+            }
+        }
+
+        function clearAllRecords() {
+            if (confirm('Tem certeza de que deseja apagar todos os registros?')) {
+                localStorage.removeItem('pesagem');
+                localStorage.removeItem('apartados');
+                localStorage.removeItem('prontos');
+                displayRecords();
+                alert('Todos os registros foram apagados, incluindo os dados de apartados e prontos.');
+            }
+        }
+
+        function clearAllApartados() {
+            if (confirm('Tem certeza de que deseja apagar todos os registros de apartados?')) {
+                localStorage.removeItem('apartados');
+                displayApartadosRecords();
+            }
+        }
+
+        function exportData() {
+            const records = JSON.parse(localStorage.getItem('pesagem')) || [];
+            let csvContent = "data:text/csv;charset=utf-8,";
+            csvContent += "Brinco;Data;Peso;GMD Anterior;GMD Geral\n";
+
+            records.forEach(record => {
+                csvContent += `${record.earTag};${record.date};${record.weight};${record.gmdAnterior || '-'};${record.gmdGeral || '-'}\n`;
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "pesagem_gado.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            setActiveMenuItem('Exportar Dados');
+        }
+
+        function displayRebanhoRecords() {
+            const rebanhoList = document.getElementById('rebanhoList');
+            const data = JSON.parse(localStorage.getItem('rebanho')) || [];
+            rebanhoList.innerHTML = '';
+
+            if (data.length > 0) {
+                const table = document.createElement('table');
+                table.innerHTML = `
+                    <tr>
+                        <th>Brinco</th>
+                        <th>Categoria</th>
+                        <th>RaÃ§a</th>
+                        <th>Data da Compra</th>
+                        <th>Data Inicial</th>
+                        <th>Peso Inicial</th>
+                        <th>Data Atual</th>
+                        <th>Peso Atual</th>
+                        <th>ProjeÃ§Ã£o</th>
+                        <th>Tempo</th>
+                        <th>GMD Geral</th>
+                        <th>AÃ§Ãµes</th>
+                    </tr>
+                `;
+
+                const startIndex = (currentPage - 1) * rowsPerPage;
+                const endIndex = startIndex + rowsPerPage;
+                const pageData = data.slice(startIndex, endIndex);
+
+                pageData.forEach((record, index) => {
+                    const row = table.insertRow();
+                    row.innerHTML = `
+                        <td>${safeGet(record, 'earTag')}</td>
+                        <td>${safeGet(record, 'category')}</td>
+                        <td>${safeGet(record, 'breed')}</td>
+                        <td>${safeGet(record, 'purchaseDate')}</td>
+                        <td>${safeGet(record, 'initialWeightDate')}</td>
+                        <td>${safeGet(record, 'initialWeight')} ${safeGet(record, 'initialWeight') ? 'kg' : ''}</td>
+                        <td>${safeGet(record, 'currentWeightDate')}</td>
+                        <td>${safeGet(record, 'currentWeight')} ${safeGet(record, 'currentWeight') ? 'kg' : ''}</td>
+                        <td>${safeGet(record, 'projection')} ${safeGet(record, 'projection') ? 'kg' : ''}</td>
+                        <td>${safeGet(record, 'time')} ${safeGet(record, 'time') ? 'dias' : ''}</td>
+                        <td>${safeGet(record, 'gmdGeral')}</td>
+                        <td><button class="btn-sm" onclick="deleteRebanhoRecord(${startIndex + index})">Excluir</button></td>
+                    `;
+                });
+                rebanhoList.appendChild(table);
+
+                updatePagination(data.length);
+            } else {
+                document.getElementById('rebanhoPagination').style.display = 'none';
+            }
+        }
+
+        function updatePagination(totalRecords) {
+            const totalPages = Math.ceil(totalRecords / rowsPerPage);
+            const pageInfo = document.getElementById('pageInfo');
+            const prevButton = document.getElementById('prevPage');
+            const nextButton = document.getElementById('nextPage');
+
+            pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+            prevButton.disabled = currentPage === 1;
+            nextButton.disabled = currentPage === totalPages;
+
+            document.getElementById('rebanhoPagination').style.display = 'block';
+        }
+
+        function prevPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                displayRebanhoRecords();
+            }
+        }
+
+        function nextPage() {
+            const data = JSON.parse(localStorage.getItem('rebanho')) || [];
+            const totalPages = Math.ceil(data.length / rowsPerPage);
+            if (currentPage < totalPages) {
+                currentPage++;
+                displayRebanhoRecords();
+            }
+        }
+
+        document.getElementById('prevPage').addEventListener('click', prevPage);
+        document.getElementById('nextPage').addEventListener('click', nextPage);
+
+        function checkEarTag() {
+            const earTag = document.getElementById('ear-tag').value;
+            const rebanhoData = JSON.parse(localStorage.getItem('rebanho')) || [];
+            const animal = rebanhoData.find(item => item.earTag === earTag);
+
+            if (!animal) {
+                alert('Brinco nÃ£o encontrado no rebanho!');
+                clearFields();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            displayRecords();
+            setTodayDate();
+            document.getElementById('ear-tag').addEventListener('keydown', function(event) {
+                if (event.key === 'Enter') {
+                    updateFields(event);
+                }
+            });
+            document.getElementById('weight').addEventListener('keydown', function(event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    document.getElementById('save-btn').focus();
+                }
+            });
+            document.getElementById('weight').addEventListener('blur', () => document.getElementById('save-btn').focus());
+            displayRebanhoRecords();
+        });
+
+        function updateFields(event) {
+            if (event && event.key === 'Enter') {
+                event.preventDefault();
+                const earTag = document.getElementById('ear-tag').value;
+                const rebanhoData = JSON.parse(localStorage.getItem('rebanho')) || [];
+                console.log('Buscando brinco:', earTag);
+                console.log('Total de animais no rebanho:', rebanhoData.length);
+                const animal = rebanhoData.find(item => item.earTag === earTag);
+                console.log('Animal encontrado:', animal);
+
+                if (animal) {
+                    document.getElementById('initial-weight-date').value = formatDate(animal.initialWeightDate);
+                    document.getElementById('last-weight').value = formatDate(animal.currentWeightDate);
+                    document.getElementById('current-weight').value = animal.currentWeight;
+                    document.getElementById('projection').value = animal.projection;
+                    document.getElementById('weight').disabled = false;
+                    document.getElementById('weight').focus();
+                } else {
+                    alert('Brinco nÃ£o encontrado no rebanho!');
+                    clearFields();
+                }
+            }
+        }
+
+        function clearFields() {
+            document.getElementById('initial-weight-date').value = '';
+            document.getElementById('last-weight').value = '';
+            document.getElementById('current-weight').value = '';
+            document.getElementById('projection').value = '';
+            document.getElementById('weight').disabled = true;
+        }
+
+        function displayApartadosRecords() {
+            const apartadosList = document.getElementById('apartadosList');
+            const apartados = JSON.parse(localStorage.getItem('apartados')) || [];
+            apartadosList.innerHTML = '';
+
+            if (apartados.length > 0) {
+                const table = document.createElement('table');
+                table.innerHTML = `
+                    <tr>
+                        <th>Brinco</th>
+                        <th>Data Pesagem</th>
+                        <th>Peso Atual</th>
+                        <th>Peso Novo</th>
+                        <th>AÃ§Ãµes</th>
+                    </tr>
+                `;
+                apartados.forEach((record, index) => {
+                    const row = table.insertRow();
+                    row.innerHTML = `
+                        <td>${record.earTag}</td>
+                        <td>${record.dataPesagem}</td>
+                        <td>${record.pesoAtual} kg</td>
+                        <td>${record.pesoNovo} kg</td>
+                        <td><button class="btn-sm" onclick="deleteApartadoRecord(${index})">Excluir</button></td>
+                    `;
+                });
+                apartadosList.appendChild(table);
+            }
+        }
+
+        function deleteApartadoRecord(index) {
+            if (confirm('Tem certeza de que deseja excluir este registro de apartados?')) {
+                const apartados = JSON.parse(localStorage.getItem('apartados')) || [];
+                apartados.splice(index, 1);
+                localStorage.setItem('apartados', JSON.stringify(apartados));
+                displayApartadosRecords();
+            }
+        }
+
+        function displayProntoRecords() {
+            const prontoList = document.getElementById('prontoList');
+            const prontos = JSON.parse(localStorage.getItem('prontos')) || [];
+            prontoList.innerHTML = '';
+
+            if (prontos.length > 0) {
+                const table = document.createElement('table');
+                table.innerHTML = `
+                    <tr>
+                        <th>Brinco</th>
+                        <th>Data Pesagem</th>
+                        <th>Peso</th>
+                        <th>AÃ§Ãµes</th>
+                    </tr>
+                `;
+                prontos.forEach((record, index) => {
+                    const row = table.insertRow();
+                    row.innerHTML = `
+                        <td>${record.earTag}</td>
+                        <td>${record.dataPesagem}</td>
+                        <td>${record.peso} kg</td>
+                        <td><button class="btn-sm" onclick="deleteProntoRecord(${index})">Excluir</button></td>
+                    `;
+                });
+                prontoList.appendChild(table);
+            }
+        }
+
+        function deleteProntoRecord(index) {
+            if (confirm('Tem certeza de que deseja excluir este registro de gado pronto?')) {
+                const prontos = JSON.parse(localStorage.getItem('prontos')) || [];
+                prontos.splice(index, 1);
+                localStorage.setItem('prontos', JSON.stringify(prontos));
+                displayProntoRecords();
+            }
+        }
+
+        function clearAllPronto() {
+            if (confirm('Tem certeza de que deseja apagar todos os registros de gado pronto?')) {
+                localStorage.removeItem('prontos');
+                displayProntoRecords();
+            }
+        }
+
+        function importFile() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const lines = event.target.result.split('\n');
+
+                const data = lines.slice(1).map(line => {
+                    const [earTag, category, breed, purchaseDate, initialWeightDate, initialWeight, currentWeightDate, currentWeight, projection, time, gmdGeral] = line.split(';');
+                    return { earTag, category, breed, purchaseDate, initialWeightDate, initialWeight, currentWeightDate, currentWeight, projection, time, gmdGeral };
+                }).filter(record => record.earTag && record.category && record.breed && record.purchaseDate && record.initialWeightDate && record.initialWeight && record.currentWeightDate && record.currentWeight && record.projection && record.time && record.gmdGeral);
+
+                localStorage.setItem('rebanho', JSON.stringify(data));
+                displayRebanhoRecords();
+            };
+            reader.readAsText(file);
+        }
+
+        function clearImportedData() {
+            if (confirm('Tem certeza de que deseja limpar todos os dados importados do rebanho?')) {
+                localStorage.removeItem('rebanho');
+                displayRebanhoRecords();
+                alert('Dados do rebanho foram limpos.');
+            }
+        }
+
+        function showSearchInfoPopup() {
+            document.getElementById('searchInfoPopup').style.display = 'flex';
+        }
+
+        function closeSearchInfoPopup() {
+            document.getElementById('searchInfoPopup').style.display = 'none';
+        }
+    </script>
+</body></html>
